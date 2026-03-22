@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Karabo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fce4ec;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        h1 {
+            color: #d81b60;
+            font-size: 1.8rem;
+            text-align: center;
+            padding: 0 20px;
+            margin-bottom: 40px;
+            z-index: 20;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 50px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            touch-action: manipulation;
+        }
+
+        #yesBtn {
+            background-color: #ff4081;
+            color: white;
+            z-index: 10;
+        }
+
+        #noBtn {
+            background-color: #ffffff;
+            color: #d81b60;
+            transition: 0.1s ease;
+            z-index: 15;
+        }
+
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 2rem;
+            user-select: none;
+            pointer-events: none;
+            z-index: 5;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="mySong">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <h1 id="question">Will you be my love for life, Karabo?</h1>
+    
+    <div class="button-group" id="buttonContainer">
+        <button class="btn" id="yesBtn" onclick="handleYes()">Yes</button>
+        <button class="btn" id="noBtn" onmouseover="moveNo()" ontouchstart="moveNo()">No</button>
+    </div>
+
+    <script>
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            btn.style.position = 'fixed'; // Fixed works better for mobile screens
+            
+            // Calculate padding so it doesn't hit the very edge of the phone
+            const padding = 20;
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
+
+            const newX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const newY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+        }
+
+        function handleYes() {
+            document.getElementById('question').innerText = "You’re stuck with me! ❤️";
+            document.getElementById('buttonContainer').style.display = 'none';
+            document.body.style.backgroundColor = "#f8bbd0";
+            
+            const song = document.getElementById('mySong');
+            song.play().catch(e => console.log("Audio play blocked until interaction."));
+            
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>
