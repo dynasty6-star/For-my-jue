@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Karabo</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fce4ec;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #d81b60;
+            font-size: 2.5rem;
+            text-align: center;
+            z-index: 20;
+            padding: 0 20px;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn { background-color: #ff4081; color: white; z-index: 10; }
+        #noBtn { background-color: #ffffff; color: #d81b60; position: absolute; }
+
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 2rem;
+            user-select: none;
+            z-index: 5;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="mySong">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <h1 id="question">Will you be my love for life, Karabo?</h1>
+    
+    <div class="container" id="buttonContainer">
+        <button class="btn" id="yesBtn" onclick="handleYes()">Yes</button>
+        <button class="btn" id="noBtn" onmouseover="moveNo()">No</button>
+    </div>
+
+    <script>
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            const maxX = window.innerWidth - btn.offsetWidth;
+            const maxY = window.innerHeight - btn.offsetHeight;
+            btn.style.left = Math.random() * maxX + 'px';
+            btn.style.top = Math.random() * maxY + 'px';
+        }
+
+        function handleYes() {
+            // 1. Change the text and hide buttons
+            document.getElementById('question').innerText = "You’re stuck with me! ❤️";
+            document.getElementById('buttonContainer').style.display = 'none';
+            document.body.style.backgroundColor = "#f8bbd0";
+            
+            // 2. Play the music
+            const song = document.getElementById('mySong');
+            song.play();
+            
+            // 3. Start the heart shower
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            heart.style.opacity = Math.random();
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>
