@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Special Question for Karabo</title>
+    <style>
+        /* Professional Reset & Modern Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            font-family: 'Apple SD Gothic Neo', 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            text-align: center;
+            transition: background 1s ease;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            z-index: 10;
+            max-width: 90%;
+        }
+
+        h1 {
+            color: #ad1457;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            align-items: center;
+            min-height: 60px;
+        }
+
+        .btn {
+            padding: 16px 45px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn {
+            background: #ff4081;
+            color: white;
+        }
+
+        #yesBtn:active {
+            transform: scale(0.95);
+        }
+
+        #noBtn {
+            background: #ffffff;
+            color: #ad1457;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        /* Success State */
+        .celebration-text {
+            font-size: 3rem;
+            display: none;
+            color: #d81b60;
+            animation: heartBeat 1.5s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="mySong">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="glass-card" id="mainCard">
+        <h1 id="question">Will you be my love for life, Karabo?</h1>
+        
+        <div class="button-group" id="buttonContainer">
+            <button class="btn" id="yesBtn" onclick="handleYes()">Yes</button>
+            <button class="btn" id="noBtn" onmouseenter="moveNo()" ontouchstart="moveNo()">No</button>
+        </div>
+        <div id="result" class="celebration-text">❤️</div>
+    </div>
+
+    <script>
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            btn.style.position = 'fixed';
+            
+            // Ensures the button doesn't fly off the screen edges
+            const padding = 50;
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        function handleYes() {
+            // Hide everything but the success message
+            document.getElementById('question').innerText = "You’re stuck with me! ❤️";
+            document.getElementById('buttonContainer').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            
+            // Change background to a warmer pink
+            document.body.style.background = "#f8bbd0";
+            
+            // Play Music
+            const song = document.getElementById('mySong');
+            song.play().catch(e => console.log("Audio waiting for interaction"));
+
+            // Launch Hearts
+            setInterval(createHeart, 250);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            heart.style.opacity = Math.random();
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>
